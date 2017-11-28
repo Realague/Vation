@@ -4,17 +4,19 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerMotor))]
 public class Playermanager : MonoBehaviour {
+
 	[SerializeField]
 	private float speed = 5f;
+	
 	[SerializeField]
 	private float lookSensitivity = 3f;
 	private PlayerMotor motor;
 
-	private void Start () {
+	void Start () {
 		motor = GetComponent<PlayerMotor>();
 	}
 	
-	void Update() {
+	void Update () {
 		float xMov = Input.GetAxisRaw("Horizontal");
 		float zMov = Input.GetAxisRaw("Vertical");
 
