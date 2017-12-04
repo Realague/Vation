@@ -50,6 +50,12 @@ public class Playermanager : MonoBehaviour {
 				Destroy(other.gameObject);
 				GameManager.instance.timer += GameManager.instance.recoverTime;
 				break;
+			case "Terrain":
+				GameManager.instance.loadingCanvas.enabled = false;
+				GameManager.instance.uiCanvas.enabled = true;
+				break;
+			default:
+			break;
 		}
     }
 }

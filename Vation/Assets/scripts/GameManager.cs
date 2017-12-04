@@ -14,11 +14,12 @@ public class GameManager : MonoBehaviour {
 
 	public int recoverTime = 5;
 
-	[SerializeField]
-	private Canvas minimap;
+	public Canvas uiCanvas;
 
 	[SerializeField]
 	private Canvas looseCanvas;
+
+	public Canvas loadingCanvas;
 
 	[SerializeField]
 	private Text levelText;
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Start() {
+		uiCanvas.enabled = false;
 		spawnTime();
 		level++;
 		levelText.text = "Level: " + level;
@@ -91,11 +93,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void loose() {
-		minimap.enabled = false;
+		uiCanvas.enabled = false;
 		looseCanvas.enabled = true;
 	}
 
 	public void loadNextLevel() {
+		uiCanvas.enabled = false;
+		loadingCanvas.enabled = true;
 		level++;
 		minNumberTime += level / 5;
 		maxNumberTime += level / 5;
