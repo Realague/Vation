@@ -42,8 +42,14 @@ public class Playermanager : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Finish")) {
-			GameManager.instance.loadNextLevel();
+		switch (other.tag) {
+			case "Finish":
+				GameManager.instance.loadNextLevel();
+				break;
+			case "Time":
+				Destroy(other.gameObject);
+				GameManager.instance.timer += GameManager.instance.recoverTime;
+				break;
 		}
     }
 }

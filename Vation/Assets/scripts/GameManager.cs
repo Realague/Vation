@@ -7,10 +7,21 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 
 	[SerializeField]
+	private int maxNumberTime = 6;
+
+	[SerializeField]
+	private int minNumberTime = 3;
+
+	public int recoverTime = 5;
+
+	[SerializeField]
 	private Canvas minimap;
 
 	[SerializeField]
 	private Canvas looseCanvas;
+
+	[SerializeField]
+	private Text levelText;
 
 	[SerializeField]
 	private Text timerText;
@@ -19,8 +30,10 @@ public class GameManager : MonoBehaviour {
 
 	private bool finish = false;
 
+	public float timer = 120f;
+
 	[SerializeField]
-	private float timer = 120f;
+	private GameObject timePrefabs;
 
 	[SerializeField]
 	private GameObject playerPrefabs;
@@ -35,7 +48,6 @@ public class GameManager : MonoBehaviour {
 	public static GameManager instance = null;
 
 	public float depth = 10f;
-
 	public int width = 256;
 	public int height = 256;
 
@@ -52,13 +64,15 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Start() {
-		startTime = Time.time;
+		spawnTime();
 		level++;
+		levelText.text = "Level: " + level;
 		Cursor.visible = false;
 		depth = mult * (level * depth) + depth;
-		player = Instantiate(playerPrefabs, new Vector3(Random.Range(0f, height), Random.Range(0f, width), depth * 5), new Quaternion(0f, 0f, 0f, 0f));
-		endLevel = Instantiate(endLevelPrefabs, new Vector3(Random.Range(0f, height), Random.Range(0f, width), depth * 5), new Quaternion(0f, 0f, 0f, 0f));
+		player = Instantiate(playerPrefabs, new Vector3(Random.Range(0f, height), depth * 5, Random.Range(0f, width)), new Quaternion(0f, 0f, 0f, 0f));
+		endLevel = Instantiate(endLevelPrefabs, new Vector3(Random.Range(0f, height), depth * 5, Random.Range(0f, width)), new Quaternion(0f, 0f, 0f, 0f));
 		Minimap.playerTransform = player.transform;
+		startTime = Time.time;
 	}
 
 	void Update() {
@@ -83,15 +97,30 @@ public class GameManager : MonoBehaviour {
 
 	public void loadNextLevel() {
 		level++;
+		minNumberTime += level / 5;
+		maxNumberTime += level / 5;
+		recoverTime += level / 5;
+		spawnTime();
+		levelText.text = "Level: " + level;
+		startTime = Time.time;
+		timer = 120f;
 		depth = mult * (level * depth) + depth;
-		player.transform.position = new Vector3(Random.Range(0f, height), Random.Range(0f, width), depth * 5);
-		endLevel.transform.position = new Vector3(Random.Range(0f, height), Random.Range(0f, width), depth * 5);
+		player.transform.position = new Vector3(Random.Range(0f, height), depth * 5, Random.Range(0f, width));
+		endLevel.transform.position = new Vector3(Random.Range(0f, height), depth * 5, Random.Range(0f, width));
 		TerrainGenerator.instance.generate();
 		Minimap.playerTransform = player.transform;
 	}
 
 	public void restart() {
 		SceneManager.LoadScene("Main");
+	}
+
+	private void spawnTime() {
+		int numberTime = Random.Range(minNumberTime, maxNumberTime);
+
+		for (int i = 0; i < numberTime; i++) {
+			Instantiate(timePrefabs, new Vector3(Random.Range(0f, height), depth * 5, Random.Range(0f, width)), new Quaternion(0f, 0f, 0f, 0f));
+		}
 	}
 
 }
