@@ -3,19 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour {
-	public int depth = 10;
-	public int width = 256;
-	public int height = 256;
+	public float depth;
+	public int width;
+	public int height;
 	public float scale = 20f;
-	public float offsetX = 100f;
-	public float offsetY = 100f;
+	public float offsetX;
+	public float offsetY;
 
-	void Start() {
-		offsetX = Random.Range(0f, 9999f);
-		offsetY = Random.Range(0f, 9999f);
+	public static TerrainGenerator instance = null;
+
+	void Awake() {
+		if (instance == null) {
+			instance = this;
+		} else if (!instance.Equals(this)) {
+			Destroy(this);
+		}
 	}
 
-	void Update() {
+	void Start() {
+		generate();
+	}
+
+	public void generate() {
+		height = GameManager.instance.height;
+		width = GameManager.instance.width;
+		depth = GameManager.instance.depth;
+		offsetX = Random.Range(0f, 9999f);
+		offsetY = Random.Range(0f, 9999f);
 		Terrain terrain = GetComponent<Terrain>();
 		terrain.terrainData = GenerateTerrain(terrain.terrainData);
 	}

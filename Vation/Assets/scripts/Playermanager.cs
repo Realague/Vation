@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayerMotor))]
 public class Playermanager : MonoBehaviour {
@@ -39,4 +40,10 @@ public class Playermanager : MonoBehaviour {
 
 		motor.RotateCamera(cameraRotation);
 	}
+
+	void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Finish")) {
+			GameManager.instance.loadNextLevel();
+		}
+    }
 }
