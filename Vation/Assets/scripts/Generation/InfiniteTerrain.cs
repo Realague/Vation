@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class InfiniteTerrain : MonoBehaviour {
 
+	const float scale = 5f;
+
 	const float viewerMoveTresholdForChunkUpdate = 25f;
 	const float sqrtViewerMoveTresholdForChunkUpdate = viewerMoveTresholdForChunkUpdate * viewerMoveTresholdForChunkUpdate;
 
@@ -24,7 +26,7 @@ public class InfiniteTerrain : MonoBehaviour {
 	int chunksVisibeInViewDst;
 
 	Dictionary<Vector2, TerrainChunk> terrainChunkDictionnary = new Dictionary<Vector2, TerrainChunk>();
-	List<TerrainChunk> terrainChunkVisibleLastUpdate  = new List<TerrainChunk>();
+	static List<TerrainChunk> terrainChunkVisibleLastUpdate  = new List<TerrainChunk>();
 
 	void Start() {
 		mapGenerator = FindObjectOfType<MapGenerator>();
@@ -37,7 +39,7 @@ public class InfiniteTerrain : MonoBehaviour {
 	}
 
 	void Update() {
-		viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+		viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
 
 		if ((viewerPositionOld - viewerPosition).sqrMagnitude > sqrtViewerMoveTresholdForChunkUpdate) {
 			viewerPositionOld = viewerPosition;
@@ -61,9 +63,6 @@ public class InfiniteTerrain : MonoBehaviour {
 
 				if (terrainChunkDictionnary.ContainsKey(viewedChunkCoord)) {
 					terrainChunkDictionnary[viewedChunkCoord].UpdateTerrainChunk();
-					if (terrainChunkDictionnary[viewedChunkCoord].IsVisible()) {
-						terrainChunkVisibleLastUpdate.Add(terrainChunkDictionnary[viewedChunkCoord]);
-					}
 				} else {
 					terrainChunkDictionnary.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, chunkSize, detailLevels, transform, mapMaterial));
 				}
@@ -98,7 +97,8 @@ public class InfiniteTerrain : MonoBehaviour {
 			meshRenderer = meshObject.AddComponent<MeshRenderer>();
 			meshFilter = meshObject.AddComponent<MeshFilter>();
 			meshRenderer.material = material;
-			meshObject.transform.position = positionV3;
+			meshObject.transform.position = positionV3 * scale;
+			meshObject.transform.localScale = Vector3.one * scale;
 			meshObject.transform.parent = parent;
 			SetVisible(false);
 
@@ -144,6 +144,8 @@ public class InfiniteTerrain : MonoBehaviour {
 							lodMesh.RequestMesh(mapData);
 						}
 					}
+
+					terrainChunkVisibleLastUpdate.Add(this);
 				}
 
 				SetVisible(visible);
