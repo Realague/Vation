@@ -149,7 +149,6 @@ public struct TerrainType {
 	public Color color;
 }
 
-[System.Serializable]
 public struct MapData {
 	public readonly float[,] heightMap;
 	public readonly Color[] colourMap;
