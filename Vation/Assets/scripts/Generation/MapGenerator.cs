@@ -13,7 +13,7 @@ public class MapGenerator : MonoBehaviour {
 	[SerializeField]
 	private PerlinNoise.NormalizedMode normalizedMode;
 
-	public const int mapChunkSize = 241;
+	public const int mapChunkSize = 239;
 	[SerializeField]
 	[Range(0,6)]
 	public int editorPreviewLOD;
@@ -114,7 +114,7 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	MapData GenerateMapData(Vector2 center) {
-		float[,] noiseMap = PerlinNoise.GenerateNoiseMap(mapChunkSize, mapChunkSize, noiseScale, seed,
+		float[,] noiseMap = PerlinNoise.GenerateNoiseMap(mapChunkSize + 2, mapChunkSize + 2, noiseScale, seed,
                                                         octaves, persistance, lacunarity, center + offset, normalizedMode);
 
 		Color[] colourMap = new Color[mapChunkSize * mapChunkSize];
