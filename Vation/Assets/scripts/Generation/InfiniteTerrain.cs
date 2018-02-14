@@ -55,9 +55,9 @@ public class InfiniteTerrain : MonoBehaviour {
 	}
 
 	void UpdateVisibleChunks() {
-		HashSet<Vector2> alreadyUpdatedChinkCoords = new HashSet<Vector2>();
+		HashSet<Vector2> alreadyUpdatedChunkCoords = new HashSet<Vector2>();
 		for (int i = visibleTerrainChunks.Count - 1; i >= 0; i--) {
-			alreadyUpdatedChinkCoords.Add(visibleTerrainChunks[i].coord);
+			alreadyUpdatedChunkCoords.Add(visibleTerrainChunks[i].coord);
 			visibleTerrainChunks[i].UpdateTerrainChunk();
 		}
 
@@ -67,7 +67,7 @@ public class InfiniteTerrain : MonoBehaviour {
 		for (int yOffset = -chunksVisibeInViewDst; yOffset <= chunksVisibeInViewDst; yOffset++) {
 			for (int xOffset = -chunksVisibeInViewDst; xOffset <= chunksVisibeInViewDst; xOffset++) {
 				Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset, currentChunkCoordY + yOffset);
-				if (!alreadyUpdatedChinkCoords.Contains(viewedChunkCoord)) {
+				if (!alreadyUpdatedChunkCoords.Contains(viewedChunkCoord)) {
 					if (terrainChunkDictionnary.ContainsKey(viewedChunkCoord)) {
 						terrainChunkDictionnary[viewedChunkCoord].UpdateTerrainChunk();
 					} else {

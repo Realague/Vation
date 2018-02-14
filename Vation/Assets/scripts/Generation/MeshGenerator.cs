@@ -7,8 +7,8 @@ public static class MeshGenerator {
 	public const int numSupportedLODs = 5;
 	public const int numSupportedChunkSizes = 9;
 	public const int numSupportedFlatshadedChunkSizes = 3;
-	public static readonly int[] supportedChunkSizes = {48, 75, 96, 120, 144, 168, 192, 216, 240};
-	public static readonly int[] supportedFlatshadedChunkSizes = {48, 75, 96};
+	public static readonly int[] supportedChunkSizes = {48, 72, 96, 120, 144, 168, 192, 216, 240};
+	public static readonly int[] supportedFlatshadedChunkSizes = {48, 72, 96};
 
 	public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve _heightCurve, int levelOfDetail, bool useFlatShading) {
 		AnimationCurve heightCurve = new AnimationCurve(_heightCurve.keys);
@@ -65,7 +65,7 @@ public static class MeshGenerator {
 			}
 		}
 
-		meshData.finalize();
+		meshData.ProcessMesh();
 
 		return meshData;
 	}
@@ -80,7 +80,7 @@ public class MeshData {
 	Vector3[] borderVertices;
 	int[] borderTriangles;
 
-    int trianglesIndex;
+    int triangleIndex;
     int borderTriangleIndex;
 
 	bool useFlatShading;
@@ -112,10 +112,10 @@ public class MeshData {
 			borderTriangles[borderTriangleIndex + 2] = c;
 			borderTriangleIndex += 3;
 		} else {
-			triangles[trianglesIndex] = a;
-			triangles[trianglesIndex + 1] = b;
-			triangles[trianglesIndex + 2] = c;
-			trianglesIndex += 3;
+			triangles[triangleIndex] = a;
+			triangles[triangleIndex + 1] = b;
+			triangles[triangleIndex + 2] = c;
+			triangleIndex += 3;
 		}
 	}
 
@@ -171,7 +171,7 @@ public class MeshData {
 		return Vector3.Cross(sideAB, sideAC).normalized;
 	}
 
-	public void finalize() {
+	public void ProcessMesh() {
 		if (useFlatShading) {
 			FlatShading();
 		} else {
