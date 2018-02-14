@@ -13,13 +13,21 @@ public class MapGenerator : MonoBehaviour {
 	public TextureData textureData;	
 
 	[SerializeField]
-	private Material terrainMaterial; 
+	private Material terrainMaterial;
+
+	[SerializeField]
+	[Range(0,MeshGenerator.numSupportedChunkSizes - 1)]
+	private int chunkSizeIndex;
+	[SerializeField]
+	[Range(0,MeshGenerator.numSupportedFlatshadedChunkSizes - 1)]
+	private int flatshadedChunkSizeIndex;
+	[SerializeField]
+	[Range(0,MeshGenerator.numSupportedLODs - 1)]
+	public int editorPreviewLOD;	
 
 	[SerializeField]
 	private DrawMode drawMode;
-	[SerializeField]
-	[Range(0,6)]
-	public int editorPreviewLOD;
+
 
 	public bool autoUpdate;
 
@@ -46,9 +54,9 @@ public class MapGenerator : MonoBehaviour {
 	public int mapChunkSize {
 		get {
 			if (terrainData.useFlatShading) {
-				return 95;
+				return MeshGenerator.supportedFlatshadedChunkSizes[flatshadedChunkSizeIndex] - 1;
 			} else {
-				return 239;
+				return MeshGenerator.supportedChunkSizes[chunkSizeIndex] - 1;
 			}
 		}
 	}
